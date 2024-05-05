@@ -5,7 +5,7 @@ from uuid import UUID
 from pydantic import ValidationError
 
 # TODO SQL
-from sqlalchemy import select, update
+from sqlalchemy import or_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.dependencies import get_settings
@@ -30,7 +30,7 @@ from app.utils.security import (
 settings = get_settings()
 
 
-class UserService(DbService):
+class UserService(DbService):  # SQLAlchemy's AsyncSession
     @classmethod
     async def _fetch_user(cls, session: AsyncSession, **filters) -> Optional[User]:
         # TODO SQL
@@ -130,6 +130,28 @@ class UserService(DbService):
         cls, session: AsyncSession, skip: int = 0, limit: int = 10
     ) -> List[User]:
         query = select(User).offset(skip).limit(limit)
+        result = await cls._execute_query(session, query)
+        return result.scalars().all()
+
+    @classmethod
+    async def search_users(
+        cls, session: AsyncSession, search_query: dict, skip: int = 0, limit: int = 10
+    ) -> List[User]:
+        query = select(User).offset(skip).limit(limit)
+
+        conditions = []
+        if "email" in search_query:
+            conditions.append(User.email.like(f"%{search_query['email']}%"))
+        if "nickname" in search_query:
+            conditions.append(User.nickname.like(f"%{search_query['nickname']}%"))
+        if "role" in search_query:
+            conditions.append(User.role.like(f"%{search_query['role']}%"))
+
+        # Apply any search conditions to the query
+        if conditions:
+            query = query.filter(or_(*conditions))
+
+        # Execute the query and return the results
         result = await cls._execute_query(session, query)
         return result.scalars().all()
 
