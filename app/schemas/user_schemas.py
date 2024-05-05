@@ -9,7 +9,6 @@ from app.models.user_model import UserRole
 from app.utils.nickname_gen import generate_nickname
 
 
-# TODO validate_url
 def validate_url(url: Optional[str]) -> Optional[str]:
     if url is None:
         return url
@@ -52,7 +51,6 @@ class UserBase(BaseModel):
         from_attributes = True
 
 
-# TODO Schemas
 class UserCreate(UserBase):
     email: EmailStr = Field(..., example="john.doe@example.com")
     password: str = Field(..., example="Secure*1234")

@@ -32,7 +32,6 @@ settings = get_settings()
 class UserService(DbService):  # SQLAlchemy's AsyncSession
     @classmethod
     async def _fetch_user(cls, session: AsyncSession, **filters) -> Optional[User]:
-        # TODO SQL
         query = select(User).filter_by(**filters)
         result = await cls._execute_query(session, query)
         return result.scalars().first() if result else None
@@ -86,8 +85,8 @@ class UserService(DbService):  # SQLAlchemy's AsyncSession
 
             session.add(new_user)
             await session.commit()
-            # TODO Improvement
-            if new_user.email_verified == False:
+
+            if new_user.email_verified is False:
                 await email_service.send_verification_email(new_user)
             return new_user
         except ValidationError as e:

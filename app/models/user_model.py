@@ -39,7 +39,6 @@ class EventType(Enum):
     GUEST_LECTURE = "guest_lecture"
 
 
-# TODO SQLAlchemy
 class User(Base, AsyncAttrs):
     """
     Represents a user within the application, corresponding to the 'users' table in the database.

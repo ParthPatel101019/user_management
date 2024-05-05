@@ -9,7 +9,6 @@ import bcrypt
 logger = getLogger(__name__)
 
 
-# BUG
 def hash_password(password: str, rounds: int = 12) -> str:
     """
     Hashes a password using bcrypt with a specified cost factor.
