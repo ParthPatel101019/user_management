@@ -1,9 +1,7 @@
 from logging.config import fileConfig
-import os
 import re
 
-from sqlalchemy import create_engine, engine_from_config
-from sqlalchemy import pool
+from sqlalchemy import create_engine
 
 from alembic import context
 from app.models.user_model import Base  # adjust "myapp.models" to the actual location of your Base

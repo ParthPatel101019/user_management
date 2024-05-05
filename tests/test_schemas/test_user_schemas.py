@@ -1,8 +1,7 @@
 import uuid
 import pytest
 from pydantic import ValidationError
-from datetime import datetime
-from app.schemas.user_schemas import UserBase, UserCreate, UserUpdate, UserResponse, UserListResponse, LoginRequest
+from app.schemas.user_schemas import UserBase, UserCreate, UserUpdate, UserResponse, LoginRequest
 
 # Fixtures for common test data
 @pytest.fixture

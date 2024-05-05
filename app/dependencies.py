@@ -1,7 +1,6 @@
 from builtins import Exception, dict, list, str
 import uuid
 from fastapi import Depends, HTTPException, Header, Cookie, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import Database
 from app.utils.template_manager import TemplateManager

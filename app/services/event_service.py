@@ -1,12 +1,10 @@
 from builtins import Exception, bool, classmethod, int, str
-from datetime import datetime, timezone
 from typing import Optional, Dict, List
 from pydantic import ValidationError
-from sqlalchemy import func, null, update, select
-from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy import func, update, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.user_model import Event, EventType, User
+from app.models.user_model import Event, EventType
 from app.schemas.event_schema import EventCreate, EventUpdate
 from app.services.db_service import DbService
 from uuid import UUID

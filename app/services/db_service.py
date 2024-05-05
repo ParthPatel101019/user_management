@@ -1,10 +1,7 @@
 from builtins import classmethod
 import logging
-from typing import Optional
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import SQLAlchemyError
-from app.models.user_model import User
 logger = logging.getLogger(__name__)
 
 class DbService:

@@ -4,7 +4,6 @@ from fastapi.responses import HTMLResponse
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.templating import Jinja2Templates
 
-from app import routers
 from app.dependencies import get_current_user, get_settings
 
 router = APIRouter()

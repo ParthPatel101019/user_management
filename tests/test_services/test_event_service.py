@@ -1,8 +1,7 @@
 from builtins import len
 import logging
 import pytest
-from sqlalchemy import select
-from app.models.user_model import Event, EventType, User
+from app.models.user_model import Event, EventType
 from app.services.event_service import EventService
 from uuid import UUID
 

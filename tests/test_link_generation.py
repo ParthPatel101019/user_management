@@ -1,12 +1,12 @@
-from builtins import len, max, sorted, str
+from builtins import len, sorted, str
 from unittest.mock import MagicMock
-from urllib.parse import parse_qs, urlparse, parse_qsl, urlunparse, urlencode
+from urllib.parse import parse_qs, urlparse, urlunparse, urlencode
 from uuid import uuid4
 
 import pytest
 from fastapi import Request
 
-from app.utils.link_generation import create_link, create_pagination_link, create_user_links, generate_pagination_links
+from app.utils.link_generation import create_link, create_user_links, generate_pagination_links
 
 from urllib.parse import urlparse, parse_qs, urlunparse, urlencode
 

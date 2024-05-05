@@ -1,6 +1,5 @@
 from builtins import dict, int, list, max, str
-from typing import List, Callable
-from urllib.parse import urlencode
+from typing import List
 from uuid import UUID
 
 from fastapi import Request

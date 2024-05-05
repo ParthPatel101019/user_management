@@ -2,7 +2,6 @@ from builtins import ValueError, bool, dict, int, str
 from pydantic import BaseModel, Field, validator
 from typing import Optional, List
 from datetime import datetime
-from enum import Enum
 import uuid
 from app.models.user_model import EventType
 

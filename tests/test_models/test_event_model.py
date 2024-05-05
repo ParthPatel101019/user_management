@@ -1,15 +1,13 @@
 
-from builtins import ValueError, hasattr, len
+from builtins import ValueError, len
 from datetime import datetime, timedelta
 import pytest
 import logging
 
 from sqlalchemy import func
-from sqlalchemy.orm import joinedload
 from app.models.user_model import Event, EventType, User, UserRole
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.orm import selectinload
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')

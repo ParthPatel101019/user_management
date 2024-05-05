@@ -1,12 +1,9 @@
 from builtins import dict, int, len, str
-from datetime import timedelta
 from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, Response, status, Request
-from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.dependencies import get_current_user, get_db, require_role
-from app.schemas.pagination_schema import EnhancedPagination
+from app.dependencies import get_db, require_role
 from app.schemas.event_schema import EventCreate, EventUpdate, EventResponse, EventListResponse
 from app.services.event_service import EventService
 from app.utils.link_generation import create_event_links, generate_pagination_links, create_event_links

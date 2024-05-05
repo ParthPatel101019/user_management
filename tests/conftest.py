@@ -1,12 +1,10 @@
 # Standard library imports
 from builtins import Exception, range, str
 from datetime import datetime, timedelta
-from unittest.mock import AsyncMock, patch
-from uuid import uuid4
+from unittest.mock import AsyncMock
 
 # Third-party imports
 import pytest
-from fastapi.testclient import TestClient
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker, scoped_session

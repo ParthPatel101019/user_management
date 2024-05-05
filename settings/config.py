@@ -2,11 +2,10 @@ from pydantic_settings import BaseSettings
 
 
 from builtins import bool, int, property, str
-from pathlib import Path
-from pydantic import  Field, AnyUrl, DirectoryPath
+from pydantic import  Field, AnyUrl
 
 class Settings(BaseSettings):
-    max_login_attempts: int = Field(default=3, description="Background color of QR codes")
+    max_login_attempts: int = Field(default=10, description="Background color of QR codes")
     # Server configuration
     server_base_url: AnyUrl = Field(default='http://localhost:8000', description="Base URL of the server")
     server_download_folder: str = Field(default='downloads', description="Folder for storing downloaded files")

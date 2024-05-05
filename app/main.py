@@ -1,6 +1,4 @@
-from builtins import Exception
 from fastapi import FastAPI
-from starlette.responses import JSONResponse
 from starlette.middleware.cors import CORSMiddleware  # Import the CORSMiddleware
 from app.database import Database
 from app.dependencies import get_settings

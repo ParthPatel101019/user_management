@@ -1,8 +1,5 @@
-import re
-from datetime import datetime
-from typing import List, Optional
-from uuid import UUID
-from pydantic import BaseModel, EmailStr, Field, HttpUrl, validator, conint
+from typing import List
+from pydantic import BaseModel, Field, HttpUrl
 
 # Pagination Model
 class Pagination(BaseModel):
