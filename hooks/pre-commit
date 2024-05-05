@@ -1,0 +1,20 @@
+#!/bin/bash
+
+: '
+Installation
+- Linux/macOS
+ln -sf /hooks/pre-commit .git/hooks/pre-commit
+
+- Windows
+New-Item -ItemType SymbolicLink -Path .\.git\hooks\pre-commit -Target .\hooks\pre-commit
+'
+
+staged_files=$(git diff --cached --name-only --diff-filter=ACM)
+
+echo "$staged_files" | xargs ruff check --fix
+echo "$staged_files" | xargs ruff check . --select I --fix
+echo "$staged_files" | xargs ruff format .
+
+echo "$staged_files" | xargs git add
+
+exit 0
