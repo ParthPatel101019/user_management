@@ -3,7 +3,7 @@ from typing import Dict, List, Optional
 from uuid import UUID
 
 from pydantic import ValidationError
-from sqlalchemy import String, cast, or_, select, update
+from sqlalchemy import String, and_, cast, or_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.dependencies import get_settings
@@ -133,20 +133,50 @@ class UserService(DbService):  # SQLAlchemy's AsyncSession
 
     @classmethod
     async def search_users(
-        cls, session: AsyncSession, search_query: dict, skip: int = 0, limit: int = 10
+        cls,
+        session: AsyncSession,
+        search_query: dict,
+        filter_query: dict,
+        skip: int = 0,
+        limit: int = 10,
     ) -> List[User]:
         query = select(User)
 
-        conditions = []
+        search_conditions = []
         if "email" in search_query:
-            conditions.append(User.email.like(f"%{search_query['email']}%"))
+            search_conditions.append(User.email.like(f"%{search_query['email']}%"))
         if "nickname" in search_query:
-            conditions.append(User.nickname.like(f"%{search_query['nickname']}%"))
+            search_conditions.append(
+                User.nickname.like(f"%{search_query['nickname']}%")
+            )
         if "role" in search_query:
-            conditions.append(cast(User.role, String).like(f"%{search_query['role']}%"))
+            search_conditions.append(
+                cast(User.role, String).like(f"%{search_query['role']}%")
+            )
 
-        if conditions:
-            query = query.filter(or_(*conditions))
+        if search_conditions:
+            query = query.filter(or_(*search_conditions))
+
+        filter_conditions = []
+        if "is_professional" in filter_query:
+            filter_conditions.append(
+                User.is_professional == filter_query["is_professional"]
+            )
+        if "is_locked" in filter_query:
+            filter_conditions.append(User.is_locked == filter_query["is_locked"])
+        if "email_verified" in filter_query:
+            filter_conditions.append(
+                User.email_verified == filter_query["email_verified"]
+            )
+        if "created_at_from" in filter_query and "created_at_to" in filter_query:
+            filter_conditions.append(
+                User.created_at.between(
+                    filter_query["created_at_from"], filter_query["created_at_to"]
+                )
+            )
+
+        if filter_conditions:
+            query = query.filter(and_(*filter_conditions))
 
         query = query.offset(skip).limit(limit)
 

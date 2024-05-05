@@ -390,18 +390,20 @@ async def verify_email(
 )
 async def search(
     request: Request,
-    search_query: dict,  # not being used as of now
+    query: dict,
     skip: int = 0,
     limit: int = 10,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_role(["ADMIN", "MANAGER"])),
 ):
-    print("-------------------")
-    print(f"{search_query=}")
-    users = await UserService.search_users(db, search_query, skip, limit)
+    search_query = query.get("search", {})
+    filter_query = query.get("filter", {})
+
+    users = await UserService.search_users(db, search_query, filter_query, skip, limit)
     total_users = len(users)
     user_responses = [UserResponse.model_validate(user) for user in users]
     pagination_links = generate_pagination_links(request, skip, limit, total_users)
+
     return UserListResponse(
         items=user_responses,
         total=total_users,
