@@ -13,7 +13,8 @@ from fastapi import (
     Response,
     status,
 )
-from fastapi.responses import RedirectResponse
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -411,3 +412,110 @@ async def search(
         size=len(user_responses),
         links=pagination_links,
     )
+
+
+@router.post(
+    "/create-dummy-data",
+    response_model=UserListResponse,
+    tags=["Search and Filtering (Admin or Manager Roles)"],
+)
+async def create_dummy_data(
+    request: Request,
+    current_user: dict,
+    db: AsyncSession = Depends(get_db),
+):
+    email_service = get_email_service()
+    user_data_list = [
+        {
+            "email": "j.seinfeld@nbc.com",
+            "nickname": "seinfeld",
+            "first_name": "Jerry",
+            "last_name": "Seinfeld",
+            "bio": "whats the deal with bios anyway?",
+            "profile_picture_url": "https://example.com/profiles/seinfeld.jpg",
+            "linkedin_profile_url": "https://linkedin.com/in/seinfeld",
+            "github_profile_url": "https://github.com/seinfeld",
+            "role": "AUTHENTICATED",
+            "password": "thisIsAStrongPassw0rd",
+        },
+        {
+            "email": "g.costanza@nbc.com",
+            "nickname": "art_vandelay",
+            "first_name": "George",
+            "last_name": "Costanza",
+            "bio": "Working at Vandelay Industries",
+            "profile_picture_url": "https://example.com/profiles/costanza.jpg",
+            "linkedin_profile_url": "https://linkedin.com/in/costanza",
+            "github_profile_url": "https://github.com/costanza",
+            "role": "MANAGER",
+            "password": "thisIsAStrongerPassw0rd",
+        },
+        {
+            "email": "l.hamilton@merc.com",
+            "nickname": "gentle_raccoon_695",
+            "first_name": "Lewis",
+            "last_name": "Hamilton",
+            "bio": "F1 driver for Mercedes.",
+            "profile_picture_url": "https://example.com/profiles/hamilton.jpg",
+            "linkedin_profile_url": "https://linkedin.com/in/hamilton",
+            "github_profile_url": "https://github.com/hamilton",
+            "role": "MANAGER",
+            "password": "CarGoVr00m",
+        },
+        {
+            "email": "m.verstappen@rb.com",
+            "nickname": "notsogentle_raccoon_695",
+            "first_name": "Max",
+            "last_name": "Verstappen",
+            "bio": "F1 driver for Redbull.",
+            "profile_picture_url": "https://example.com/profiles/verstappen.jpg",
+            "linkedin_profile_url": "https://linkedin.com/in/verstappen",
+            "github_profile_url": "https://github.com/verstappen",
+            "role": "ADMIN",
+            "password": "DuDuDuDuMaxVerstappen",
+        },
+        {
+            "email": "l.norris@mclaren.com",
+            "nickname": "arctic_monkey",
+            "first_name": "Lando",
+            "last_name": "Norris",
+            "bio": "Golf player for McLaren.",
+            "profile_picture_url": "https://example.com/profiles/norris.jpg",
+            "linkedin_profile_url": "https://linkedin.com/in/norris",
+            "github_profile_url": "https://github.com/norris",
+            "role": "AUTHENTICATED",
+            "password": "Land0n0rr!s",
+        },
+        {
+            "email": "g.russel@merc.com",
+            "nickname": "g_russel",
+            "first_name": "George",
+            "last_name": "Hamilton",
+            "bio": "this is a random F1 bio.",
+            "profile_picture_url": "https://example.com/profiles/russel.jpg",
+            "linkedin_profile_url": "https://linkedin.com/in/russel",
+            "github_profile_url": "https://github.com/russel",
+            "role": "ANONYMOUS",
+            "password": "rand0mPassw!rd",
+        },
+        {
+            "email": "jane.doe@example.com",
+            "nickname": "boba_tea",
+            "first_name": "Jane",
+            "last_name": "Doe",
+            "bio": "Experienced software developer specializing in databases.",
+            "profile_picture_url": "https://example.com/profiles/jane.jpg",
+            "linkedin_profile_url": "https://linkedin.com/in/janedoe",
+            "github_profile_url": "https://github.com/janedoe",
+            "role": "ANONYMOUS",
+            "password": "Secure*1234",
+        },
+    ]
+    for user_data in user_data_list:
+        try:
+            await UserService.create(db, user_data, email_service)
+        except:
+            continue
+
+    response = jsonable_encoder({"success": True})
+    return JSONResponse(response)
