@@ -5,6 +5,7 @@ from uuid import UUID
 from pydantic import ValidationError
 from sqlalchemy import String, and_, cast, or_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.sql.expression import func
 
 from app.dependencies import get_settings
 from app.exceptions.user_exceptions import (
@@ -152,6 +153,12 @@ class UserService(DbService):  # SQLAlchemy's AsyncSession
         if "role" in search_query:
             search_conditions.append(
                 cast(User.role, String).like(f"%{search_query['role']}%")
+            )
+        if "bio" in search_query:
+            query = query.filter(
+                func.to_tsvector("english", User.bio).match(
+                    func.to_tsquery("english", search_query["bio"])
+                )
             )
 
         if search_conditions:
