@@ -13,6 +13,7 @@ from app.services.db_service import DbService
 
 logger = logging.getLogger(__name__)
 
+
 class EventService(DbService):
     @classmethod
     async def _fetch_event(cls, session: AsyncSession, **kwargs) -> Optional[Event]:
@@ -29,7 +30,9 @@ class EventService(DbService):
         return await cls._fetch_event(session, title=title)
 
     @classmethod
-    async def create(cls, session: AsyncSession, event_data: Dict[str, str]) -> Optional[Event]:
+    async def create(
+        cls, session: AsyncSession, event_data: Dict[str, str]
+    ) -> Optional[Event]:
         try:
             validated_data = EventCreate(**event_data).model_dump()
             logging.info(f"My validated data is: {validated_data}")
@@ -42,10 +45,17 @@ class EventService(DbService):
             return None
 
     @classmethod
-    async def update(cls, session: AsyncSession, event_id: UUID, update_data: Dict[str, str]) -> Optional[Event]:
+    async def update(
+        cls, session: AsyncSession, event_id: UUID, update_data: Dict[str, str]
+    ) -> Optional[Event]:
         try:
             validated_data = EventUpdate(**update_data).model_dump(exclude_unset=True)
-            query = update(Event).where(Event.id == event_id).values(**validated_data).execution_options(synchronize_session="fetch")
+            query = (
+                update(Event)
+                .where(Event.id == event_id)
+                .values(**validated_data)
+                .execution_options(synchronize_session="fetch")
+            )
             await cls._execute_query(session, query)
             updated_event = await cls.get_by_id(session, event_id)
             if updated_event:
@@ -61,7 +71,7 @@ class EventService(DbService):
         except Exception as e:
             logger.error(f"Error during event update: {e}")
             return None
-        
+
     @classmethod
     async def delete(cls, session: AsyncSession, event_id: UUID) -> bool:
         event = await cls.get_by_id(session, event_id)
@@ -73,13 +83,17 @@ class EventService(DbService):
         return True
 
     @classmethod
-    async def list_events(cls, session: AsyncSession, skip: int = 0, limit: int = 10) -> List[Event]:
+    async def list_events(
+        cls, session: AsyncSession, skip: int = 0, limit: int = 10
+    ) -> List[Event]:
         query = select(Event).offset(skip).limit(limit)
         result = await cls._execute_query(session, query)
         return result.scalars().all() if result else []
 
     @classmethod
-    async def publish_event(cls, session: AsyncSession, event_id: UUID) -> Optional[Event]:
+    async def publish_event(
+        cls, session: AsyncSession, event_id: UUID
+    ) -> Optional[Event]:
         event = await cls.get_by_id(session, event_id)
         if event:
             event.publish_event()
@@ -89,7 +103,9 @@ class EventService(DbService):
         return None
 
     @classmethod
-    async def unpublish_event(cls, session: AsyncSession, event_id: UUID) -> Optional[Event]:
+    async def unpublish_event(
+        cls, session: AsyncSession, event_id: UUID
+    ) -> Optional[Event]:
         event = await cls.get_by_id(session, event_id)
         if event:
             event.unpublish_event()
@@ -99,20 +115,40 @@ class EventService(DbService):
         return None
 
     @classmethod
-    async def list_events_by_creator(cls, session: AsyncSession, creator_id: UUID, skip: int = 0, limit: int = 10) -> List[Event]:
-        query = select(Event).where(Event.creator_id == creator_id).offset(skip).limit(limit)
+    async def list_events_by_creator(
+        cls, session: AsyncSession, creator_id: UUID, skip: int = 0, limit: int = 10
+    ) -> List[Event]:
+        query = (
+            select(Event)
+            .where(Event.creator_id == creator_id)
+            .offset(skip)
+            .limit(limit)
+        )
         result = await cls._execute_query(session, query)
         return result.scalars().all() if result else []
 
     @classmethod
-    async def list_published_events(cls, session: AsyncSession, skip: int = 0, limit: int = 10) -> List[Event]:
+    async def list_published_events(
+        cls, session: AsyncSession, skip: int = 0, limit: int = 10
+    ) -> List[Event]:
         query = select(Event).where(Event.published == True).offset(skip).limit(limit)
         result = await cls._execute_query(session, query)
         return result.scalars().all() if result else []
 
     @classmethod
-    async def list_events_by_type(cls, session: AsyncSession, event_type: EventType, skip: int = 0, limit: int = 10) -> List[Event]:
-        query = select(Event).where(Event.event_type == event_type).offset(skip).limit(limit)
+    async def list_events_by_type(
+        cls,
+        session: AsyncSession,
+        event_type: EventType,
+        skip: int = 0,
+        limit: int = 10,
+    ) -> List[Event]:
+        query = (
+            select(Event)
+            .where(Event.event_type == event_type)
+            .offset(skip)
+            .limit(limit)
+        )
         result = await cls._execute_query(session, query)
         return result.scalars().all() if result else []
 

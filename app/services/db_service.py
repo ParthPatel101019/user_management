@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 logger = logging.getLogger(__name__)
 
+
 class DbService:
     @classmethod
     async def _execute_query(cls, session: AsyncSession, query):
@@ -17,5 +18,3 @@ class DbService:
             logger.error(f"Database error: {e}")
             await session.rollback()
             return None
-
-    

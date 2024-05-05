@@ -12,20 +12,15 @@ class Pagination(BaseModel):
 
     class Config:
         json_schema_extra = {
-            "example": {
-                "page": 1,
-                "per_page": 10,
-                "total_items": 50,
-                "total_pages": 5
-            }
+            "example": {"page": 1, "per_page": 10, "total_items": 50, "total_pages": 5}
         }
-
 
 
 class PaginationLink(BaseModel):
     rel: str
     href: HttpUrl
     method: str = "GET"
+
 
 class EnhancedPagination(Pagination):
     links: List[PaginationLink] = []

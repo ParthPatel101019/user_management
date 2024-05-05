@@ -38,6 +38,7 @@ class EventType(Enum):
     MOCK_INTERVIEW = "mock_interview"
     GUEST_LECTURE = "guest_lecture"
 
+
 # TODO SQLAlchemy
 class User(Base, AsyncAttrs):
     """

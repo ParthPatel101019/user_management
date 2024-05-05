@@ -23,13 +23,15 @@ def event_base_data():
         "start_datetime": datetime.now(),
         "end_datetime": datetime.now() + timedelta(hours=2),
         "published": False,
-        "event_type": EventType.COMPANY_TOUR
+        "event_type": EventType.COMPANY_TOUR,
     }
+
 
 @pytest.fixture
 def event_create_data(event_base_data, verified_user):
     event_base_data["creator_id"] = verified_user.id
     return event_base_data
+
 
 @pytest.fixture
 def event_update_data():
@@ -39,8 +41,9 @@ def event_update_data():
         "start_datetime": datetime.now() + timedelta(days=1),
         "end_datetime": datetime.now() + timedelta(days=1, hours=2),
         "published": True,
-        "event_type": EventType.GUEST_LECTURE
+        "event_type": EventType.GUEST_LECTURE,
     }
+
 
 @pytest.fixture
 def event_response_data(event_base_data):
@@ -51,10 +54,11 @@ def event_response_data(event_base_data):
         "updated_at": datetime.now(),
         "links": [
             {"rel": "self", "href": f"/events/{uuid.uuid4()}"},
-            {"rel": "creator", "href": f"/users/{uuid.uuid4()}"}
+            {"rel": "creator", "href": f"/users/{uuid.uuid4()}"},
         ],
-        **event_base_data
+        **event_base_data,
     }
+
 
 # Tests for EventBase
 def test_event_base_valid(event_base_data):
@@ -66,10 +70,14 @@ def test_event_base_valid(event_base_data):
     assert event.published == event_base_data["published"]
     assert event.event_type == event_base_data["event_type"]
 
+
 def test_event_base_invalid_end_datetime(event_base_data):
-    event_base_data["end_datetime"] = event_base_data["start_datetime"] - timedelta(hours=1)
+    event_base_data["end_datetime"] = event_base_data["start_datetime"] - timedelta(
+        hours=1
+    )
     with pytest.raises(ValidationError):
         EventBase(**event_base_data)
+
 
 # Tests for EventCreate
 def test_event_create_valid(event_create_data):
@@ -81,6 +89,7 @@ def test_event_create_valid(event_create_data):
     assert event_create.published == event_create_data["published"]
     assert event_create.event_type == event_create_data["event_type"]
 
+
 # Tests for EventUpdate
 def test_event_update_valid(event_update_data):
     event_update = EventUpdate(**event_update_data)
@@ -90,6 +99,7 @@ def test_event_update_valid(event_update_data):
     assert event_update.end_datetime == event_update_data["end_datetime"]
     assert event_update.published == event_update_data["published"]
     assert event_update.event_type == event_update_data["event_type"]
+
 
 # Tests for EventResponse
 def test_event_response_valid(event_response_data):
@@ -106,6 +116,7 @@ def test_event_response_valid(event_response_data):
     assert event_response.updated_at == event_response_data["updated_at"]
     assert event_response.links == event_response_data["links"]
 
+
 # Tests for EventListResponse
 def test_event_list_response_valid(event_response_data):
     event_list_response_data = {
@@ -118,8 +129,8 @@ def test_event_list_response_valid(event_response_data):
             {"rel": "next", "href": None},
             {"rel": "prev", "href": None},
             {"rel": "first", "href": "/events?page=1&size=10"},
-            {"rel": "last", "href": "/events?page=1&size=10"}
-        ]
+            {"rel": "last", "href": "/events?page=1&size=10"},
+        ],
     }
     event_list_response = EventListResponse(**event_list_response_data)
     assert event_list_response.items[0].id == event_response_data["id"]

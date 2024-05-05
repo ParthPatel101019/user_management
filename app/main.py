@@ -22,20 +22,21 @@ app = FastAPI(
 # It can be configured to allow specific methods, headers, and origins
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3001"],  # Update this to match your Next.js app's URL
+    allow_origins=[
+        "http://localhost:3001"
+    ],  # Update this to match your Next.js app's URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 @app.on_event("startup")
 async def startup_event():
     settings = get_settings()
     Database.initialize(settings.database_url, settings.debug)
 
+
 app.include_router(user_routes.router)
 app.include_router(event_routes.router)
 app.include_router(ui_routes.router)
-
-
-

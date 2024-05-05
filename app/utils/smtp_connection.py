@@ -15,11 +15,11 @@ class SMTPClient:
 
     def send_email(self, subject: str, html_content: str, recipient: str):
         try:
-            message = MIMEMultipart('alternative')
-            message['Subject'] = subject
-            message['From'] = self.username
-            message['To'] = recipient
-            message.attach(MIMEText(html_content, 'html'))
+            message = MIMEMultipart("alternative")
+            message["Subject"] = subject
+            message["From"] = self.username
+            message["To"] = recipient
+            message.attach(MIMEText(html_content, "html"))
 
             with smtplib.SMTP(self.server, self.port) as server:
                 server.starttls()  # Use TLS
