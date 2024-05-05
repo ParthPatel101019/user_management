@@ -121,6 +121,76 @@ async def user(db_session):
 
 
 @pytest.fixture(scope="function")
+async def search_users(db_session):
+    users = [
+        User(
+            nickname="seinfeld",
+            email="j.seinfeld@nbc.com",
+            first_name="Jerry",
+            last_name="Seinfeld",
+            bio="whats the deal with bios anyway?",
+            hashed_password=hash_password("thisIsAStrongPassw0rd"),
+            role=UserRole.AUTHENTICATED,
+            email_verified=True,
+            is_locked=False,
+        ),
+        User(
+            nickname="art_vandelay",
+            email="g.costanza@nbc.com",
+            first_name="George",
+            last_name="Costanza",
+            hashed_password=hash_password("thisIsAStrongerPassw0rd"),
+            role=UserRole.MANAGER,
+            email_verified=True,
+            is_locked=False,
+        ),
+        User(
+            nickname="hamilton",
+            email="l.hamilton@merc.com",
+            first_name="Lewis",
+            last_name="Hamilton",
+            hashed_password=hash_password("CarGoVr00m"),
+            role=UserRole.MANAGER,
+            email_verified=True,
+            is_locked=False,
+        ),
+        User(
+            nickname="g_russel",
+            email="g.russel@merc.com",
+            first_name="George",
+            last_name="Russel",
+            hashed_password=hash_password("thisIsAStrongPassw0rd"),
+            role=UserRole.ANONYMOUS,
+            email_verified=False,
+            is_locked=True,
+        ),
+        User(
+            nickname="verstappen",
+            email="m.verstappen@rb.com",
+            first_name="Max",
+            last_name="Verstappen",
+            hashed_password=hash_password("thisIsAStrongPassw0rd"),
+            role=UserRole.ADMIN,
+            email_verified=True,
+            is_locked=False,
+        ),
+        User(
+            nickname="norris",
+            email="norris@mclaren.com",
+            first_name="Lando",
+            last_name="Norris",
+            hashed_password=hash_password("thisIsAStrongPassw0rd"),
+            role=UserRole.AUTHENTICATED,
+            email_verified=True,
+            is_locked=False,
+        ),
+    ]
+    db_session.add_all(users)
+    await db_session.commit()
+    return users
+
+
+@pytest.fixture(scope="function")
 async def verified_user(db_session):
     user_data = {
         "nickname": fake.user_name(),
