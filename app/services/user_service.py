@@ -137,8 +137,7 @@ class UserService(DbService):  # SQLAlchemy's AsyncSession
     async def search_users(
         cls, session: AsyncSession, search_query: dict, skip: int = 0, limit: int = 10
     ) -> List[User]:
-        # BUG Issue #6
-        query = select(User).offset(skip).limit(limit)
+        query = select(User)
 
         conditions = []
         if "email" in search_query:
@@ -150,6 +149,8 @@ class UserService(DbService):  # SQLAlchemy's AsyncSession
 
         if conditions:
             query = query.filter(or_(*conditions))
+
+        query = query.offset(skip).limit(limit)
 
         try:
             result = await cls._execute_query(session, query)
