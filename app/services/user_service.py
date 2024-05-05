@@ -3,9 +3,7 @@ from typing import Dict, List, Optional
 from uuid import UUID
 
 from pydantic import ValidationError
-
-# TODO SQL
-from sqlalchemy import or_, select, update
+from sqlalchemy import String, cast, or_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.dependencies import get_settings
@@ -145,7 +143,7 @@ class UserService(DbService):  # SQLAlchemy's AsyncSession
         if "nickname" in search_query:
             conditions.append(User.nickname.like(f"%{search_query['nickname']}%"))
         if "role" in search_query:
-            conditions.append(User.role.like(f"%{search_query['role']}%"))
+            conditions.append(cast(User.role, String).like(f"%{search_query['role']}%"))
 
         if conditions:
             query = query.filter(or_(*conditions))
