@@ -137,6 +137,7 @@ class UserService(DbService):  # SQLAlchemy's AsyncSession
     async def search_users(
         cls, session: AsyncSession, search_query: dict, skip: int = 0, limit: int = 10
     ) -> List[User]:
+        # BUG Issue #6
         query = select(User).offset(skip).limit(limit)
 
         conditions = []
@@ -147,13 +148,14 @@ class UserService(DbService):  # SQLAlchemy's AsyncSession
         if "role" in search_query:
             conditions.append(User.role.like(f"%{search_query['role']}%"))
 
-        # Apply any search conditions to the query
         if conditions:
             query = query.filter(or_(*conditions))
 
-        # Execute the query and return the results
-        result = await cls._execute_query(session, query)
-        return result.scalars().all()
+        try:
+            result = await cls._execute_query(session, query)
+            return result.scalars().all()
+        except AttributeError:
+            return []
 
     @classmethod
     async def register_user(

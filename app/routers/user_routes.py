@@ -396,8 +396,10 @@ async def search(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_role(["ADMIN", "MANAGER"])),
 ):
-    total_users = await UserService.count(db)
+    print("-------------------")
+    print(f"{search_query=}")
     users = await UserService.search_users(db, search_query, skip, limit)
+    total_users = len(users)
     user_responses = [UserResponse.model_validate(user) for user in users]
     pagination_links = generate_pagination_links(request, skip, limit, total_users)
     return UserListResponse(
