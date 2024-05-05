@@ -1,14 +1,17 @@
 from builtins import len, sorted, str
 from unittest.mock import MagicMock
-from urllib.parse import parse_qs, urlparse, urlunparse, urlencode
+from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 from uuid import uuid4
 
 import pytest
 from fastapi import Request
 
-from app.utils.link_generation import create_link, create_user_links, generate_pagination_links
+from app.utils.link_generation import (
+    create_link,
+    create_user_links,
+    generate_pagination_links,
+)
 
-from urllib.parse import urlparse, parse_qs, urlunparse, urlencode
 
 def normalize_url(url):
     """Normalize the URL for consistent comparison by sorting query parameters."""

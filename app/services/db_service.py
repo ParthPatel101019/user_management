@@ -1,7 +1,9 @@
-from builtins import classmethod
 import logging
-from sqlalchemy.ext.asyncio import AsyncSession
+from builtins import classmethod
+
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.ext.asyncio import AsyncSession
+
 logger = logging.getLogger(__name__)
 
 class DbService:

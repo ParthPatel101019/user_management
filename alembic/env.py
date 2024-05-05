@@ -1,12 +1,14 @@
-from logging.config import fileConfig
 import re
+from logging.config import fileConfig
 
 from sqlalchemy import create_engine
 
 from alembic import context
-from app.models.user_model import Base  # adjust "myapp.models" to the actual location of your Base
-
 from app.dependencies import get_settings
+from app.models.user_model import (
+    Base,  # adjust "myapp.models" to the actual location of your Base
+)
+
 settings = get_settings()
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

@@ -1,8 +1,10 @@
-from builtins import ValueError, any, bool, str
-from pydantic import BaseModel, EmailStr, Field, validator, root_validator
-from typing import Optional, List
-import uuid
 import re
+import uuid
+from builtins import ValueError, any, bool, str
+from typing import List, Optional
+
+from pydantic import BaseModel, EmailStr, Field, root_validator, validator
+
 from app.models.user_model import UserRole
 from app.utils.nickname_gen import generate_nickname
 

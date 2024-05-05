@@ -1,10 +1,18 @@
 from builtins import range
+
 import pytest
+
 from app.dependencies import get_settings
+from app.exceptions.user_exceptions import (
+    AccountLockedException,
+    EmailAlreadyExistsException,
+    InvalidCredentialsException,
+    InvalidVerificationTokenException,
+    UserNotFoundException,
+)
 from app.models.user_model import UserRole
 from app.services.user_service import UserService
 from app.utils.nickname_gen import generate_nickname
-from app.exceptions.user_exceptions import UserNotFoundException, EmailAlreadyExistsException, InvalidCredentialsException, AccountLockedException, InvalidVerificationTokenException
 
 pytestmark = pytest.mark.asyncio
 

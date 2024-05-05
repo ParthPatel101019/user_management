@@ -1,9 +1,11 @@
 # email_service.py
 from builtins import ValueError, dict, str
-from settings.config import settings
+
+from app.models.user_model import User
 from app.utils.smtp_connection import SMTPClient
 from app.utils.template_manager import TemplateManager
-from app.models.user_model import User
+from settings.config import settings
+
 
 class EmailService:
     def __init__(self, template_manager: TemplateManager):

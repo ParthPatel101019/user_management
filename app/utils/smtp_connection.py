@@ -1,9 +1,10 @@
 # smtp_client.py
-from builtins import Exception, int, str
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 import logging
+import smtplib
+from builtins import Exception, int, str
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
 
 class SMTPClient:
     def __init__(self, server: str, port: int, username: str, password: str):

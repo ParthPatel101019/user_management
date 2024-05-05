@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field, HttpUrl
 
+
 class Link(BaseModel):
     rel: str = Field(..., description="Relation type of the link.")
     href: HttpUrl = Field(..., description="The URL of the link.")

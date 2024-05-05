@@ -1,13 +1,19 @@
 from builtins import dict, int, len, str
 from uuid import UUID
-from fastapi import APIRouter, Depends, HTTPException, Response, status, Request
+
+from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.dependencies import get_db, require_role
-from app.schemas.event_schema import EventCreate, EventUpdate, EventResponse, EventListResponse
+
+from app.dependencies import get_db, get_settings, require_role
+from app.schemas.event_schema import (
+    EventCreate,
+    EventListResponse,
+    EventResponse,
+    EventUpdate,
+)
 from app.services.event_service import EventService
-from app.utils.link_generation import create_event_links, generate_pagination_links, create_event_links
-from app.dependencies import get_settings
+from app.utils.link_generation import create_event_links, generate_pagination_links
 
 router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")

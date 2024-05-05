@@ -1,8 +1,8 @@
+from builtins import bool, int, property, str
+
+from pydantic import AnyUrl, Field
 from pydantic_settings import BaseSettings
 
-
-from builtins import bool, int, property, str
-from pydantic import  Field, AnyUrl
 
 class Settings(BaseSettings):
     max_login_attempts: int = Field(default=10, description="Background color of QR codes")

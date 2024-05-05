@@ -1,19 +1,36 @@
+import logging
 from builtins import Exception, dict, int, len, print, str
 from datetime import timedelta
-import logging
+from uuid import UUID
+
+import jwt
 from fastapi import (
     APIRouter,
+    Body,
     Depends,
     HTTPException,
     Request,
     Response,
     status,
-    Body,
 )
 from fastapi.responses import RedirectResponse
-import jwt
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.dependencies import get_current_user, get_db, get_email_service, require_role
+
+from app.dependencies import (
+    get_current_user,
+    get_db,
+    get_email_service,
+    get_settings,
+    require_role,
+)
+from app.exceptions.user_exceptions import (
+    AccountLockedException,
+    EmailAlreadyExistsException,
+    InvalidCredentialsException,
+    InvalidVerificationTokenException,
+    UserNotFoundException,
+)
 from app.schemas.token_schema import TokenResponse
 from app.schemas.user_schemas import (
     UserCreate,
@@ -21,20 +38,10 @@ from app.schemas.user_schemas import (
     UserResponse,
     UserUpdate,
 )
-from app.services.user_service import UserService
-from app.services.jwt_service import create_access_token
-from app.utils.link_generation import create_user_links, generate_pagination_links
-from app.dependencies import get_settings
 from app.services.email_service import EmailService
-from app.exceptions.user_exceptions import (
-    UserNotFoundException,
-    EmailAlreadyExistsException,
-    InvalidCredentialsException,
-    AccountLockedException,
-    InvalidVerificationTokenException,
-)
-from uuid import UUID
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from app.services.jwt_service import create_access_token
+from app.services.user_service import UserService
+from app.utils.link_generation import create_user_links, generate_pagination_links
 
 router = APIRouter()
 settings = get_settings()

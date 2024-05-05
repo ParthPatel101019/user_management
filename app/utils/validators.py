@@ -1,5 +1,7 @@
 from builtins import bool, str
-from email_validator import validate_email, EmailNotValidError
+
+from email_validator import EmailNotValidError, validate_email
+
 
 def validate_email_address(email: str) -> bool:
     """

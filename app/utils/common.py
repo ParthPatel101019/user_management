@@ -1,5 +1,6 @@
 import logging.config
 import os
+
 from app.dependencies import get_settings
 
 settings = get_settings()

@@ -5,20 +5,21 @@ from unittest.mock import AsyncMock
 
 # Third-party imports
 import pytest
-from httpx import AsyncClient
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.orm import sessionmaker, scoped_session
 from faker import Faker
+from httpx import AsyncClient
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
+
+from app.database import Base, Database
+from app.dependencies import get_db, get_settings
 
 # Application-specific imports
 from app.main import app
-from app.database import Base, Database
 from app.models.user_model import Event, EventType, User, UserRole
-from app.dependencies import get_db, get_settings
-from app.utils.security import hash_password
-from app.utils.template_manager import TemplateManager
 from app.services.email_service import EmailService
 from app.services.jwt_service import create_access_token
+from app.utils.security import hash_password
+from app.utils.template_manager import TemplateManager
 
 fake = Faker()
 

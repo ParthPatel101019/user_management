@@ -1,11 +1,13 @@
 # test_users.py
 
 from builtins import len
+
 import pytest
 from sqlalchemy.future import select
 
 from app.models.user_model import User, UserRole
 from app.utils.security import verify_password
+
 
 @pytest.mark.asyncio
 async def test_user_creation(db_session, verified_user):

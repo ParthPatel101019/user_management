@@ -1,9 +1,18 @@
 import uuid
+from datetime import datetime, timedelta
+
 import pytest
 from pydantic import ValidationError
-from datetime import datetime, timedelta
-from app.schemas.event_schema import EventBase, EventCreate, EventUpdate, EventResponse, EventListResponse
+
 from app.models.user_model import EventType
+from app.schemas.event_schema import (
+    EventBase,
+    EventCreate,
+    EventListResponse,
+    EventResponse,
+    EventUpdate,
+)
+
 
 # Fixtures for common test data
 @pytest.fixture

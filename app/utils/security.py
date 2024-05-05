@@ -1,8 +1,9 @@
 # app/security.py
-from builtins import Exception, ValueError, bool, int, str
 import secrets
-import bcrypt
+from builtins import Exception, ValueError, bool, int, str
 from logging import getLogger
+
+import bcrypt
 
 # Set up logging
 logger = getLogger(__name__)

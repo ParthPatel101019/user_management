@@ -1,5 +1,7 @@
-import markdown2
 from pathlib import Path
+
+import markdown2
+
 
 class TemplateManager:
     def __init__(self):

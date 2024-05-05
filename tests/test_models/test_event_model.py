@@ -1,13 +1,14 @@
 
+import logging
 from builtins import ValueError, len
 from datetime import datetime, timedelta
-import pytest
-import logging
 
+import pytest
 from sqlalchemy import func
-from app.models.user_model import Event, EventType, User, UserRole
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+
+from app.models.user_model import Event, EventType, User, UserRole
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')

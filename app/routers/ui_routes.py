@@ -1,4 +1,5 @@
 from builtins import dict
+
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse
 from fastapi.security import OAuth2PasswordBearer

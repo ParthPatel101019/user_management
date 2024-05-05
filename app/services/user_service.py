@@ -1,29 +1,30 @@
 from builtins import Exception, bool, classmethod, int, len, str
-from typing import Optional, Dict, List
+from typing import Dict, List, Optional
+from uuid import UUID
+
 from pydantic import ValidationError
 
 # TODO SQL
-from sqlalchemy import update, select
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.dependencies import get_settings
-from app.models.user_model import User
+from app.exceptions.user_exceptions import (
+    AccountLockedException,
+    EmailAlreadyExistsException,
+    InvalidCredentialsException,
+    InvalidVerificationTokenException,
+    UserNotFoundException,
+)
+from app.models.user_model import User, UserRole
 from app.schemas.user_schemas import UserCreate, UserUpdate
 from app.services.db_service import DbService
+from app.services.email_service import EmailService
 from app.utils.nickname_gen import generate_nickname
 from app.utils.security import (
     generate_verification_token,
     hash_password,
     verify_password,
-)
-from uuid import UUID
-from app.services.email_service import EmailService
-from app.models.user_model import UserRole
-from app.exceptions.user_exceptions import (
-    UserNotFoundException,
-    EmailAlreadyExistsException,
-    InvalidCredentialsException,
-    AccountLockedException,
-    InvalidVerificationTokenException,
 )
 
 settings = get_settings()

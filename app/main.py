@@ -1,9 +1,11 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware  # Import the CORSMiddleware
+
 from app.database import Database
 from app.dependencies import get_settings
 from app.routers import event_routes, ui_routes, user_routes
 from app.utils.api_description import getDescription
+
 app = FastAPI(
     title="User Management",
     description=getDescription(),

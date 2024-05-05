@@ -1,8 +1,11 @@
 from builtins import str
+
 import pytest
+
 from app.models.user_model import UserRole
-from app.utils.nickname_gen import generate_nickname
 from app.services.jwt_service import decode_token  # Import your FastAPI app
+from app.utils.nickname_gen import generate_nickname
+
 
 # Example of a test function using the async_client fixture
 @pytest.mark.asyncio
@@ -78,9 +81,12 @@ async def test_create_user_invalid_email(async_client):
     response = await async_client.post("/register/", json=user_data)
     assert response.status_code == 422
 
-import pytest
-from app.services.jwt_service import decode_token
 from urllib.parse import urlencode
+
+import pytest
+
+from app.services.jwt_service import decode_token
+
 
 @pytest.mark.asyncio
 async def test_login_success(async_client, verified_user):

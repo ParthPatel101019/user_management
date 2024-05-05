@@ -1,7 +1,10 @@
 # test_security.py
 from builtins import RuntimeError, ValueError, isinstance, str
+
 import pytest
+
 from app.utils.security import hash_password, verify_password
+
 
 def test_hash_password():
     """Test that hashing password returns a bcrypt hashed string."""

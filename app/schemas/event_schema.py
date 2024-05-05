@@ -1,9 +1,12 @@
-from builtins import ValueError, bool, dict, int, str
-from pydantic import BaseModel, Field, validator
-from typing import Optional, List
-from datetime import datetime
 import uuid
+from builtins import ValueError, bool, dict, int, str
+from datetime import datetime
+from typing import List, Optional
+
+from pydantic import BaseModel, Field, validator
+
 from app.models.user_model import EventType
+
 
 class EventBase(BaseModel):
     title: str = Field(..., example="Company Tour", min_length=1)

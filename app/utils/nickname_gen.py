@@ -1,5 +1,5 @@
-from builtins import str
 import random
+from builtins import str
 
 
 def generate_nickname() -> str:

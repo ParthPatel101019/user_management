@@ -1,21 +1,25 @@
+import uuid
 from builtins import ValueError, bool, int, str
 from datetime import datetime, timezone
 from enum import Enum
-import uuid
+
 from sqlalchemy import (
-    Column,
-    ForeignKey,
-    String,
-    Integer,
-    DateTime,
     Boolean,
+    Column,
+    DateTime,
+    ForeignKey,
+    Integer,
+    String,
     func,
+)
+from sqlalchemy import (
     Enum as SQLAlchemyEnum,
 )
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from app.database import Base
 from sqlalchemy.ext.asyncio import AsyncAttrs
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.database import Base
 
 
 class UserRole(Enum):

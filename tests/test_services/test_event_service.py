@@ -1,9 +1,11 @@
-from builtins import len
 import logging
+from builtins import len
+from uuid import UUID
+
 import pytest
+
 from app.models.user_model import Event, EventType
 from app.services.event_service import EventService
-from uuid import UUID
 
 pytestmark = pytest.mark.asyncio
 # Configure logging

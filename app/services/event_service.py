@@ -1,14 +1,15 @@
+import logging
 from builtins import Exception, bool, classmethod, int, str
-from typing import Optional, Dict, List
+from typing import Dict, List, Optional
+from uuid import UUID
+
 from pydantic import ValidationError
-from sqlalchemy import func, update, select
+from sqlalchemy import func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.user_model import Event, EventType
 from app.schemas.event_schema import EventCreate, EventUpdate
 from app.services.db_service import DbService
-from uuid import UUID
-import logging
 
 logger = logging.getLogger(__name__)
 
