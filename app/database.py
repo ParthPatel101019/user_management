@@ -1,12 +1,15 @@
 from builtins import ValueError, bool, classmethod, str
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.orm import declarative_base, sessionmaker
 from threading import Lock
+
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import declarative_base, sessionmaker
 
 Base = declarative_base()
 
+
 class Database:
     """Handles database connections and sessions."""
+
     _engine = None
     _session_factory = None
     _lock = Lock()  # Mutex lock for thread safety
@@ -16,14 +19,12 @@ class Database:
         """Initialize the async engine and sessionmaker. Thread-safe initialization."""
         with cls._lock:  # Ensure that initialization is thread-safe
             if cls._engine is None:
-                cls._engine = create_async_engine(
-                    database_url, echo=echo, future=True
-                )
+                cls._engine = create_async_engine(database_url, echo=echo, future=True)
                 cls._session_factory = sessionmaker(
                     bind=cls._engine,
                     class_=AsyncSession,
                     expire_on_commit=False,
-                    future=True
+                    future=True,
                 )
 
     @classmethod

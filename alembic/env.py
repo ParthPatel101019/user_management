@@ -1,14 +1,14 @@
-from logging.config import fileConfig
-import os
 import re
+from logging.config import fileConfig
 
-from sqlalchemy import create_engine, engine_from_config
-from sqlalchemy import pool
+from sqlalchemy import create_engine
 
 from alembic import context
-from app.models.user_model import Base  # adjust "myapp.models" to the actual location of your Base
-
 from app.dependencies import get_settings
+from app.models.user_model import (
+    Base,  # adjust "myapp.models" to the actual location of your Base
+)
+
 settings = get_settings()
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -56,14 +56,10 @@ def run_migrations_offline() -> None:
 
 
 def run_migrations_online():
-    
-    sync_database_url = re.sub(r'\+asyncpg', '', settings.database_url)
+    sync_database_url = re.sub(r"\+asyncpg", "", settings.database_url)
     connectable = create_engine(sync_database_url)
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection,
-            target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()

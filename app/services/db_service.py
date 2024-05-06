@@ -1,11 +1,11 @@
-from builtins import classmethod
 import logging
-from typing import Optional
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
+from builtins import classmethod
+
 from sqlalchemy.exc import SQLAlchemyError
-from app.models.user_model import User
+from sqlalchemy.ext.asyncio import AsyncSession
+
 logger = logging.getLogger(__name__)
+
 
 class DbService:
     @classmethod
@@ -18,5 +18,3 @@ class DbService:
             logger.error(f"Database error: {e}")
             await session.rollback()
             return None
-
-    

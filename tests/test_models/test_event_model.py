@@ -1,18 +1,19 @@
-
-from builtins import ValueError, hasattr, len
-from datetime import datetime, timedelta
-import pytest
 import logging
+from builtins import ValueError, len
+from datetime import datetime, timedelta
 
+import pytest
 from sqlalchemy import func
-from sqlalchemy.orm import joinedload
-from app.models.user_model import Event, EventType, User, UserRole
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.orm import selectinload
+
+from app.models.user_model import Event, EventType, User, UserRole
 
 # Configure logging
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
 
 def log_event_details(event: Event):
     logging.info(f"Event Title: {event.title}")
@@ -28,14 +29,15 @@ def log_event_details(event: Event):
 async def log_user_event_details(user: User, db_session: AsyncSession):
     logging.info(f"User ID: {user.id}")
     logging.info(f"User Nickname: {user.nickname}")
-    
-    await db_session.refresh(user, ['events'])
-    
+
+    await db_session.refresh(user, ["events"])
+
     if user.events:
         for event in user.events:
             logging.info(f"Event ID: {event.id} Title: {event.title}")
     else:
         logging.info("No events found for this user.")
+
 
 @pytest.mark.asyncio
 async def test_event_creation(db_session: AsyncSession, verified_user):
@@ -46,7 +48,7 @@ async def test_event_creation(db_session: AsyncSession, verified_user):
         "end_datetime": datetime.now() + timedelta(hours=2),
         "published": False,
         "event_type": EventType.COMPANY_TOUR,
-        "creator_id": verified_user.id
+        "creator_id": verified_user.id,
     }
     event = Event(**event_data)
     db_session.add(event)
@@ -59,6 +61,7 @@ async def test_event_creation(db_session: AsyncSession, verified_user):
     assert event.event_type == EventType.COMPANY_TOUR
     assert event.creator_id == verified_user.id
 
+
 @pytest.mark.asyncio
 async def test_event_update(db_session: AsyncSession, company_tour_event):
     company_tour_event.title = "Updated Company Tour"
@@ -69,6 +72,7 @@ async def test_event_update(db_session: AsyncSession, company_tour_event):
     assert company_tour_event.title == "Updated Company Tour"
     assert company_tour_event.published is True
 
+
 @pytest.mark.asyncio
 async def test_event_delete(db_session: AsyncSession, mock_interview_event):
     await db_session.delete(mock_interview_event)
@@ -76,6 +80,7 @@ async def test_event_delete(db_session: AsyncSession, mock_interview_event):
 
     deleted_event = await db_session.get(Event, mock_interview_event.id)
     assert deleted_event is None
+
 
 @pytest.mark.asyncio
 async def test_user_events_relationship(db_session: AsyncSession, verified_user):
@@ -100,14 +105,20 @@ async def test_user_events_relationship(db_session: AsyncSession, verified_user)
     db_session.add_all([event1, event2])
     await db_session.commit()
 
-    user_events = await db_session.scalars(select(Event).where(Event.creator_id == verified_user.id))
+    user_events = await db_session.scalars(
+        select(Event).where(Event.creator_id == verified_user.id)
+    )
     assert len(user_events.all()) == 2
 
+
 @pytest.mark.asyncio
-async def test_event_creator_relationship(db_session: AsyncSession, guest_lecture_event):
+async def test_event_creator_relationship(
+    db_session: AsyncSession, guest_lecture_event
+):
     creator = await db_session.get(User, guest_lecture_event.creator_id)
     assert creator is not None
     assert creator.role == UserRole.MANAGER
+
 
 @pytest.mark.asyncio
 async def test_event_publish_unpublish(db_session: AsyncSession, company_tour_event):
@@ -123,6 +134,7 @@ async def test_event_publish_unpublish(db_session: AsyncSession, company_tour_ev
     await db_session.refresh(company_tour_event)
     assert company_tour_event.published is False
 
+
 @pytest.mark.asyncio
 async def test_event_validate_dates(db_session: AsyncSession, verified_user):
     with pytest.raises(ValueError):
@@ -137,8 +149,11 @@ async def test_event_validate_dates(db_session: AsyncSession, verified_user):
         )
         event.validate_event_dates()
 
+
 @pytest.mark.asyncio
-async def test_user_deletion_cascades_to_events(db_session: AsyncSession, user_with_events):
+async def test_user_deletion_cascades_to_events(
+    db_session: AsyncSession, user_with_events
+):
     await db_session.delete(user_with_events)
     await db_session.commit()
 

@@ -1,34 +1,49 @@
+import uuid
 from builtins import ValueError, bool, int, str
 from datetime import datetime, timezone
 from enum import Enum
-import uuid
+
 from sqlalchemy import (
-    Column, ForeignKey, String, Integer, DateTime, Boolean, func, Enum as SQLAlchemyEnum
+    Boolean,
+    Column,
+    DateTime,
+    ForeignKey,
+    Integer,
+    String,
+    func,
 )
-from sqlalchemy.dialects.postgresql import UUID, ENUM
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from app.database import Base
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import (
+    Enum as SQLAlchemyEnum,
+)
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.asyncio import AsyncAttrs
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.database import Base
+
 
 class UserRole(Enum):
     """Enumeration of user roles within the application, stored as ENUM in the database."""
+
     ANONYMOUS = "ANONYMOUS"
     AUTHENTICATED = "AUTHENTICATED"
     MANAGER = "MANAGER"
     ADMIN = "ADMIN"
 
+
 class EventType(Enum):
     """Enumeration of event types within the application."""
+
     COMPANY_TOUR = "company_tour"
     MOCK_INTERVIEW = "mock_interview"
     GUEST_LECTURE = "guest_lecture"
+
 
 class User(Base, AsyncAttrs):
     """
     Represents a user within the application, corresponding to the 'users' table in the database.
     This class uses SQLAlchemy ORM for mapping attributes to database columns efficiently.
-    
+
     Attributes:
         id (UUID): Unique identifier for the user.
         nickname (str): Unique nickname for privacy, required.
@@ -58,10 +73,13 @@ class User(Base, AsyncAttrs):
         has_role(role_name): Checks if the user has a specified role.
         update_professional_status(status): Updates the professional status and logs the update time.
     """
+
     __tablename__ = "users"
     __mapper_args__ = {"eager_defaults": True}
 
-    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
     nickname: Mapped[str] = Column(String(50), unique=True, nullable=False, index=True)
     email: Mapped[str] = Column(String(255), unique=True, nullable=False, index=True)
     first_name: Mapped[str] = Column(String(100), nullable=True)
@@ -70,18 +88,29 @@ class User(Base, AsyncAttrs):
     profile_picture_url: Mapped[str] = Column(String(255), nullable=True)
     linkedin_profile_url: Mapped[str] = Column(String(255), nullable=True)
     github_profile_url: Mapped[str] = Column(String(255), nullable=True)
-    role: Mapped[UserRole] = Column(SQLAlchemyEnum(UserRole, name='UserRole', create_constraint=True), nullable=False)
+    role: Mapped[UserRole] = Column(
+        SQLAlchemyEnum(UserRole, name="UserRole", create_constraint=True),
+        nullable=False,
+    )
     is_professional: Mapped[bool] = Column(Boolean, default=False)
-    professional_status_updated_at: Mapped[datetime] = Column(DateTime(timezone=True), nullable=True)
+    professional_status_updated_at: Mapped[datetime] = Column(
+        DateTime(timezone=True), nullable=True
+    )
     last_login_at: Mapped[datetime] = Column(DateTime(timezone=True), nullable=True)
     failed_login_attempts: Mapped[int] = Column(Integer, default=0)
     is_locked: Mapped[bool] = Column(Boolean, default=False)
-    created_at: Mapped[datetime] = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at: Mapped[datetime] = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+    created_at: Mapped[datetime] = Column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[datetime] = Column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
     verification_token = Column(String, nullable=True)
     email_verified: Mapped[bool] = Column(Boolean, default=False, nullable=False)
     hashed_password: Mapped[str] = Column(String(255), nullable=False)
-    events = relationship("Event", back_populates="creator", lazy='dynamic', cascade="all, delete-orphan")
+    events = relationship(
+        "Event", back_populates="creator", lazy="dynamic", cascade="all, delete-orphan"
+    )
 
     def update_last_login(self):
         self.last_login_at = datetime.now(timezone.utc)
@@ -98,7 +127,7 @@ class User(Base, AsyncAttrs):
 
     def reset_login_attempts(self):
         self.failed_login_attempts = 0
-        
+
     def verify_email(self):
         self.email_verified = True
 
@@ -110,20 +139,30 @@ class User(Base, AsyncAttrs):
         self.is_professional = status
         self.professional_status_updated_at = func.now()
 
+
 class Event(Base):
     """Represents an event within the application."""
+
     __tablename__ = "events"
-    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
     title: Mapped[str] = Column(String(255), nullable=False)
     description: Mapped[str] = Column(String(1000), nullable=True)
     start_datetime: Mapped[datetime] = Column(DateTime(timezone=True), nullable=False)
     end_datetime: Mapped[datetime] = Column(DateTime(timezone=True), nullable=False)
     published: Mapped[bool] = Column(Boolean, default=False, nullable=False)
     event_type: Mapped[EventType] = Column(SQLAlchemyEnum(EventType), nullable=False)
-    creator_id: Mapped[uuid.UUID] = Column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=False)
-    created_at: Mapped[datetime] = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at: Mapped[datetime] = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
-    
+    creator_id: Mapped[uuid.UUID] = Column(
+        UUID(as_uuid=True), ForeignKey("users.id"), nullable=False
+    )
+    created_at: Mapped[datetime] = Column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[datetime] = Column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
     creator = relationship("User", back_populates="events")
 
     def publish_event(self):
@@ -135,7 +174,6 @@ class Event(Base):
         """Marks the event as unpublished."""
         self.published = False
         updated_at = func.now()
-
 
     def validate_event_dates(self):
         """Ensure that the event cannot start after it ends."""
