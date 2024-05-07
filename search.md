@@ -26,4 +26,12 @@ Call `UserService.search_users` with the following parameters
 - `search_query (dict)`: The dictionary for passing search queries
 - `filter_query (dict)`:  The dictionary for passing filter queries
 
+### Example
 
+This is the data to be sent in request body
+```
+{
+    'search': {'email': 'rb.com', 'nickname': 'seinfeld'}
+    'filter': {'email_verified': true, 'is_locked': false}
+}
+```
