@@ -75,7 +75,7 @@ jobs:
           push: true
           tags: parthpatel101019/user_management:${{ github.ref_name }} # Uses the branch name for tagging
           platforms: linux/amd64,linux/arm64 # Multi-platform support
-          cache-from: type=registry,ref=kparthpatel101019/user_management:cache
+          cache-from: type=registry,ref=parthpatel101019/user_management:cache
           cache-to: type=inline,mode=max
           
       - name: Scan the Docker image
