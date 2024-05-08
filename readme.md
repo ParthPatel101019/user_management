@@ -22,7 +22,7 @@
 -The combined use of these technologies highlights the need for an enhanced development workflow that includes version control, CI/CD pipelines, automated testing, and deployment strategies. This not only accelerates development but also enhances the quality and reliability of the software.
 
 ### Learning and Adaptability
--Working with this tech stack requires a continuous learning mindset due to rapid technological evolutions. Staying up-to-date with the latest features, security practices, and community-driven enhancements is crucial. This environment promotes adaptability in technology, encouraging ongoing education and adjustments in tools and practices.
+- Working with this tech stack requires a continuous learning mindset due to rapid technological evolutions. Staying up-to-date with the latest features, security practices, and community-driven enhancements is crucial. This environment promotes adaptability in technology, encouraging ongoing education and adjustments in tools and practices.
 
 ### Understanding the Code Base
 - Gaining an understanding of the code base was an iterative process involving reviewing documentation, exploring the code, and testing functionalities. This hands-on approach was crucial for navigating and contributing to the project effectively.
