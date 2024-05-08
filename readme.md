@@ -41,7 +41,7 @@
 
 ### Features and Issues
 - **Implemented Features:**
-  - Decided to implement the user search and filtering feature. Documentation can be found [here](https://github.com/ParthPatel101019/user_management/blob/main/search.md).
+  - Decided to implement the user search and filtering feature. Documentation can be found [here](https://github.com/ParthPatel101019/user_management/blob/main/search.md). And link [here](https://github.com/ParthPatel101019/user_management/pull/12)
 
 - **Resolved Issues:**
   - Handled empty/null query set ([Issue #4](https://github.com/ParthPatel101019/user_management/issues/4))
